@@ -25,6 +25,8 @@ def parse(id: int) -> list:
         rows = table.find_all('tr', class_='table__row')
         for row in rows:
             person = Person()
+
+            person.place = row.find('td', class_='table__cell_role_place').text
             person.name = row.find('div', class_='table__data_type_ptp').text
 
             tasks = row.find_all('td', class_='table__cell_role_result')
