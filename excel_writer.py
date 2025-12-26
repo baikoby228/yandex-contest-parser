@@ -4,15 +4,20 @@ from openpyxl.styles import Alignment
 import sys
 import os
 
-def write_to_excel(persons: list, id: int) -> None:
+def write_to_excel(persons: list, id: int | str, flag: bool, dop: int = 0) -> None:
     wb = openpyxl.Workbook()
     sheet = wb.active
 
     tasks_count = 0
     for person in persons:
         tasks_count = max(tasks_count, person.tasks_count)
+        if person.tasks_count == 3:
+            print(person.name)
 
-    sheet.append(['Место', 'Фамилия, имя, область участника'] + [chr(ord('A') + i) for i in range(tasks_count)] + ['Итог'])
+    if flag:
+        sheet.append(['Место', 'Фамилия, имя, область участника'] + [chr(ord('A') + i) for i in range(tasks_count)] + ['Итог'])
+    else:
+        sheet.append(['Место', 'Фамилия, имя, область участника'] + [i + dop for i in range(tasks_count)] + ['Итог'])
 
     for person in persons:
         sheet.append([person.place] + [person.name] + person.points + [person.total_points])
