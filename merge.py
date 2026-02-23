@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from person import Person
 from excel_writer import write_to_excel
 
-def merge(file_names: list, task_count: int, row=None) -> list:
+def merge(file_names: list, task_count: list, row=None) -> list:
     names = set()
     for file_name in file_names:
         wb = load_workbook(file_name + '.xlsx')
@@ -13,7 +13,8 @@ def merge(file_names: list, task_count: int, row=None) -> list:
             names.add(name)
 
     cnt = {}
-    for file_name in file_names:
+    for i in range(len(file_names)):
+        file_name = file_names[i]
         wb = load_workbook(file_name + '.xlsx')
         sheet = wb.active
 
@@ -25,7 +26,7 @@ def merge(file_names: list, task_count: int, row=None) -> list:
                 continue
 
             name = row[1].value
-            total = row[task_count + 2].value
+            total = row[task_count[i] + 2].value
 
             if name in used:
                 continue
@@ -48,9 +49,10 @@ def merge(file_names: list, task_count: int, row=None) -> list:
         person.name = key
 
         for x in value:
-            person.tasks_count += 1
-            person.points.append(x)
-            person.total_points += x
+            if x != '—':
+                person.tasks_count += 1
+                person.points.append(x)
+                person.total_points += x
 
         if person.total_points not in cnt_points:
             cnt_points[person.total_points] = 0
@@ -75,5 +77,5 @@ def merge(file_names: list, task_count: int, row=None) -> list:
     return res
 
 if __name__ == '__main__':
-    persons = merge(['informatika2', 'informatika3'], 8)
-    write_to_excel(persons, '2-3', False, 2)
+    persons = merge(['smena4', 'smena5'], [8, 15])
+    write_to_excel(persons, 'smeni4-5', False, 2)

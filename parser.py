@@ -33,7 +33,7 @@ def parse(id: int) -> list:
             for task in tasks:
                 person.tasks_count += 1
                 points = task.find('span', class_='standings-cell__score').text
-                person.points.append(int(points) if points != '—' else points)
+                person.points.append(int(float(points)) if points != '—' else points)
             person.total_points = int(row.find('td', class_='table__cell_role_meta').text)
 
             res.append(person)
